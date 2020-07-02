@@ -7,6 +7,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 using EF_UI;
 using UI = EF_UI.UIHelper;
 
@@ -21,7 +22,13 @@ namespace EF_UserInterface {
             test1.AddMenuSelection(new MenuSelection("A", "Awesomesauce!", MenuColours.STRONG));
             test1.AddMenuSelection(new MenuSelection("B", "Bawesome!", MenuColours.TITLE));
             test1.AddMenuSelection(new MenuSelection("C", "Coolio!"));
-            UI.DrawMenu(test1);
+            List<string> errors = new List<string>();
+            List<string> successMessages = new List<string>();
+            while (true) {
+                UI.DrawMenu(test1, errors, successMessages);
+                UI.GetValidUserSelection(test1, out errors);
+            }
+            
         }
     }
 }

@@ -48,18 +48,21 @@ namespace EF_UI {
         /// Draws the passed Menu to the screen.
         /// </summary>
         /// <param name="menu">The Menu to draw to the screen</param>
-        public static void DrawMenu(Menu menu, List<string> exceptions = null, List<string> errors = null) {
+        public static void DrawMenu(Menu menu, List<string> errors = null, List<string> successMessages = null) {
             Console.Clear();
-            //Write out any exceptions and errors before drawing the Menu
-            if (exceptions != null && exceptions.Count > 0) {
-                foreach (string exception in exceptions) {
-                    WriteException(exception);
-                }
-            }
+            //Write out any errors before drawing the Menu
             if (errors != null && errors.Count > 0) {
                 foreach (string error in errors) {
                     WriteError(error);
                 }
+                errors.Clear();
+            }
+            //Write out any success messages before drawing the Menu
+            if (successMessages != null && successMessages.Count > 0) {
+                foreach (string success in successMessages) {
+                    WriteSuccess(success);
+                }
+                successMessages.Clear();
             }
             DrawDivider();
             MenuTitle title = menu.GetTitle();
@@ -77,7 +80,21 @@ namespace EF_UI {
                 DrawSelections(selections);
                 DrawDivider();
             }
+            //DrawPrompt(menu.GetPrompt());
+        }
+
+        public static string GetValidUserSelection(Menu menu, out List<string> errorMessages) {
             DrawPrompt(menu.GetPrompt());
+            string userSelection = Console.ReadLine().ToLower();
+            List<MenuSelection> validSelections = menu.GetMenuSelections();
+            errorMessages = new List<string>();
+            foreach (MenuSelection selection in validSelections) {
+                if (userSelection.ToLower() == selection.Option.ToLower()) {
+                    return userSelection;
+                }
+            }
+            errorMessages.Add($"Invalid choice: \"{userSelection}\"");
+            return string.Empty;
         }
 
         /// <summary>
@@ -121,7 +138,6 @@ namespace EF_UI {
             }
         }
         
-
         /// <summary>
         /// Writes the passed message to the console.
         /// Does not prepend or append the box-edge UI elements
