@@ -1,13 +1,12 @@
 ﻿/*
  * Library:         EF_UI
  * Module:          EF_UI.cs
- * Date:            2020/06/16
- * Author:          Edward Fischer 0440835
+ * Date:            2020/07/01
+ * Author:          Edward Fischer
  * Description:     Contains the abstract EF_UI class and related components.
  */
 
 using System;
-using System.IO;
 using System.Collections.Generic;
 
 namespace EF_UI {
@@ -45,8 +44,23 @@ namespace EF_UI {
             Console.WriteLine("+"); //right side
         }
 
-        public static void DrawMenu(Menu menu) {
+        /// <summary>
+        /// Draws the passed Menu to the screen.
+        /// </summary>
+        /// <param name="menu">The Menu to draw to the screen</param>
+        public static void DrawMenu(Menu menu, List<string> exceptions = null, List<string> errors = null) {
             Console.Clear();
+            //Write out any exceptions and errors before drawing the Menu
+            if (exceptions != null && exceptions.Count > 0) {
+                foreach (string exception in exceptions) {
+                    WriteException(exception);
+                }
+            }
+            if (errors != null && errors.Count > 0) {
+                foreach (string error in errors) {
+                    WriteError(error);
+                }
+            }
             DrawDivider();
             MenuTitle title = menu.GetTitle();
             if (title.Text != "" && title.Text != null) {
@@ -66,22 +80,38 @@ namespace EF_UI {
             DrawPrompt(menu.GetPrompt());
         }
 
+        /// <summary>
+        /// Draws the passed MenuTitle to the screen centered.
+        /// </summary>
+        /// <param name="title">The MenuTitle to draw</param>
         private static void DrawTitle(MenuTitle title) {
             WriteLine(title.Text, title.Colour, true);
         }
 
+        /// <summary>
+        /// Draws the passed List of MenuLines to the screen
+        /// </summary>
+        /// <param name="lines">The List of MenuLines to draw</param>
         public static void DrawMenuLines(List<MenuLine> lines) {
             foreach (MenuLine line in lines) {
                 WriteLine(line.Text, line.Colour);
             }
         }
 
+        /// <summary>
+        /// Draws the passed List of MenuSelections to the screen
+        /// </summary>
+        /// <param name="selections">The List of MenuSelections to draw to the screen</param>
         public static void DrawSelections(List<MenuSelection> selections) {
             foreach (MenuSelection selection in selections) {
                 WriteLine(selection.Option.PadRight(5) + selection.Text);
             }
         }
 
+        /// <summary>
+        /// Draws the passed prompt text to the screen
+        /// </summary>
+        /// <param name="promptText">The text to prompt the user with</param>
         public static void DrawPrompt(string promptText = "") {
             if (promptText == "") {
                 Write("Enter an option: ");
@@ -89,8 +119,6 @@ namespace EF_UI {
             else {
                 Write(promptText);
             }
-                
-            //WriteLine(promptText);
         }
         
 
@@ -192,106 +220,6 @@ namespace EF_UI {
         }
 
 
-
-        ///// <summary>
-        ///// Draws the main menu to the screen including prompt options.
-        ///// </summary>
-        ///// <param name="accounts">The populated List of accounts.</param>
-        //public static void DrawMainMenu(List<Account> accounts) {
-        //    //Draw the title
-        //    DrawTitle("Password Manager (Edward Fischer 0440835)");
-        //    //if there are accounts, draw them
-        //    if (accounts.Count > 0)
-        //        DrawAccounts(accounts);
-        //    //draw the prompts
-        //    WriteLine("Please choose from the following options: ", Colours.INSTRUCTIONS_MESSAGE);
-        //    //Only allow user to pick an account if there are accounts
-        //    if (accounts.Count > 0)
-        //        WriteLine(" #. Inspect the chosen number's account details", Colours.INSTRUCTIONS_MESSAGE);
-        //    WriteLine(" A. Add a new account", Colours.INSTRUCTIONS_MESSAGE);
-        //    WriteLine(" X. Save accounts to JSON and exit the application", Colours.INSTRUCTIONS_MESSAGE);
-        //    DrawDivider();
-        //}
-
-        ///// <summary>
-        ///// Draws the Account Details menu to the screen including prompt options.
-        ///// </summary>
-        ///// <param name="account">The Account the user has selected</param>
-        ///// <param name="selectedAccountIndex">The selected account's index in the List of populated accounts.</param>
-        //public static void DrawAccountMenu(Account account, int selectedAccountIndex) {
-        //    const int LEFT_PADDING = 20;
-
-        //    DrawTitle($"{selectedAccountIndex + 1}. {account.Description}", Colours.ACCOUNT);
-        //    //Write account details
-        //    WriteLine("User ID: ".PadLeft(LEFT_PADDING) + account.UserID);
-        //    WriteLine("Password: ".PadLeft(LEFT_PADDING) + account.Password.Value);
-        //    DrawPasswordStrength($"{account.Password.StrengthText} ({account.Password.StrengthNum}%)", GetColourForStrength(account.Password.StrengthNum));
-
-        //    //Only display LastReset if LastReset is not blank
-        //    if (!account.Password.LastReset.Equals("")) {
-        //        //Determine the difference between now and when the password was last reset
-        //        DateTime now = DateTime.Now;
-        //        DateTime lastReset = DateTime.Parse(account.Password.LastReset);
-        //        var diff = now.Subtract(lastReset);
-        //        string days;
-        //        if (diff.Days == 1)
-        //            days = $"({diff.Days} day ago)";
-        //        else if (diff.Days == 0)
-        //            days = "(today)";
-        //        else
-        //            days = $"({diff.Days} days ago)";
-
-        //        WriteLine("Last Reset: ".PadLeft(LEFT_PADDING) + account.Password.LastReset + $" {days}");
-        //    }
-
-        //    //Only display LoginURL if LoginURL is not blank
-        //    //IMPORTANT NOTE:
-        //    //Due to the JSON schema LoginURL must validate as URI, however a blank URI will not validate
-        //    //despite LoginURL being an optional property in the schema.
-        //    if (!account.LoginURL.Equals(""))
-        //        WriteLine("Login URL: ".PadLeft(LEFT_PADDING) + account.LoginURL);
-
-        //    //Only display AccountNum if AccountNum is not blank
-        //    if (!account.AccountNum.Equals(""))
-        //        WriteLine("Account #: ".PadLeft(LEFT_PADDING) + account.AccountNum);
-        //    DrawDivider();
-        //    //User prompt options
-        //    WriteLine("Please choose from the following options: ", Colours.INSTRUCTIONS_MESSAGE);
-        //    WriteLine(" P. Change this account's password", Colours.INSTRUCTIONS_MESSAGE);
-        //    WriteLine(" D. Delete this account", Colours.INSTRUCTIONS_MESSAGE);
-        //    WriteLine(" M. Save account and return to main menu", Colours.INSTRUCTIONS_MESSAGE);
-        //    DrawDivider();
-        //}
-
-
-
-        ///// <summary>
-        ///// Draws the accounts in the passed List to the console.
-        ///// Prepends the ordinal number of each account in each written line.
-        ///// Encloses each account within box-edge UI elements.
-        ///// </summary>
-        ///// <param name="accounts">A List containing the accounts to print to the console</param>
-        //private static void DrawAccounts(List<Account> accounts) {
-        //    WriteLine("Accounts:", Colours.ACCOUNT);
-        //    foreach (Account acc in accounts)
-        //        WriteLine($" {accounts.IndexOf(acc) + 1}. {acc.Description}", Colours.ACCOUNT);
-        //    DrawDivider();
-        //}
-
-        ///// <summary>
-        ///// Draws the password strength field to the console, coloured appropriately.
-        ///// </summary>
-        ///// <param name="strength">The strength string to print to the console</param>
-        ///// <param name="colour">The colour of the strength of the password</param>
-        //private static void DrawPasswordStrength(string strength, Colours colour) {
-        //    int WORKING_AREA = Console.WindowWidth - 3;
-        //    const int LEFT_PADDING = 20;
-        //    Write("| " + "Password Strength: ".PadLeft(LEFT_PADDING));
-        //    Write(strength, colour);
-        //    Console.WriteLine("|".PadLeft(WORKING_AREA - strength.Length - LEFT_PADDING));
-        //}
-
-
         ///////////////////////
         //// Error Writing ////
         ///////////////////////
@@ -319,8 +247,5 @@ namespace EF_UI {
         public static void WriteSuccess(string message) {
             WriteColouredLine($"[SUCCESS]: {message}", MenuColours.SUCCESS_MESSAGE);
         }
-
-
-
     }//end UIHelper
 }
