@@ -28,7 +28,7 @@ For example:
 |X|Exit the application|
 MenuSelections are left-justified, and can be optionally coloured in a future update.
 
-##UI_Helper
+## UI_Helper
 UI_Helper is an abstract class which contains useful methods for interacting with `Menu`s, specifically UI_Helper contains `DrawMenu()` and `GetValidUserSelection()`,
 which draw the passed `Menu` to the console and get a valid user selection for the passed `Menu`, respectfully.
 
