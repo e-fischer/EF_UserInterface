@@ -14,14 +14,24 @@ namespace EF_UI {
     /// Enum containing all colours for each type of message.
     /// </summary>
     public enum MenuColours {
-        RED = 12,                   //Red
-        DARK_RED = 4,               //DarkRed
-        GREEN = 10,                 //Green
-        DARK_GREEN = 2,             //DarkGreen
-        MAGENTA = 13,               //Magenta
-        BLUE = 1,                   //Blue
-        CYAN = 11,                  //Cyan
+        BLACK = 0,
+        BLUE = 9,
+        CYAN = 11,
+        DARK_BLUE = 1,
+        DARK_CYAN = 3,
+        DARK_GRAY = 8,
+        DARK_GREEN = 2,
+        DARK_MAGENTA = 5,
+        DARK_RED = 4,
+        DARK_YELLOW = 6,
+        GRAY = 7,
+        GREEN = 10,
+        MAGENTA = 13,
+        RED = 12,
+        WHITE = 15,
+        YELLOW = 14,
         DEFAULT = 15,               //White
+
     }
     
     /// <summary>

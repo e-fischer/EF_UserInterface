@@ -8,7 +8,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 namespace EF_UI {
     /// <summary>
     /// Menu class.
@@ -53,6 +52,10 @@ namespace EF_UI {
         }
         public void SetTitle(string title, MenuColours colour = MenuColours.DEFAULT) {
             MenuTitle newTitle = new MenuTitle(title, colour);
+            Title = newTitle;
+        }
+        public void SetTitle(string title, ConsoleColor colour = ConsoleColor.White) {
+            MenuTitle newTitle = new MenuTitle(title, (MenuColours) colour);
             Title = newTitle;
         }
         public List<MenuLine> GetLines() { 

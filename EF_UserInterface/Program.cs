@@ -6,7 +6,6 @@
  * Description:     A simple demo program illustrating the use of the EF_UI.UIHelper and Menu
  */
 
-using System;
 using System.Collections.Generic;
 using EF_UI;
 using UI = EF_UI.UIHelper; //Bind EF_UI.UIHelper.* to UI.*
