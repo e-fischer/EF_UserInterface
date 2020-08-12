@@ -14,17 +14,13 @@ namespace EF_UI {
     /// Enum containing all colours for each type of message.
     /// </summary>
     public enum MenuColours {
-        ERROR_MESSAGE = 12,         //Red
-        EXCEPTION_MESSAGE = 4,      //DarkRed
-        SUCCESS_MESSAGE = 10,       //Green
-        INSTRUCTIONS_MESSAGE = 2,   //DarkGreen
-        ACCOUNT = 13,               //Magenta
-        TITLE = 1,                  //Blue
-        VERY_WEAK = 4,              //DarkRed
-        WEAK = 12,                  //Red
-        GOOD = 11,                  //Cyan
-        STRONG = 2,                 //DarkGreen
-        VERY_STRONG = 10,           //Green
+        RED = 12,                   //Red
+        DARK_RED = 4,               //DarkRed
+        GREEN = 10,                 //Green
+        DARK_GREEN = 2,             //DarkGreen
+        MAGENTA = 13,               //Magenta
+        BLUE = 1,                   //Blue
+        CYAN = 11,                  //Cyan
         DEFAULT = 15,               //White
     }
     
@@ -48,7 +44,7 @@ namespace EF_UI {
         /// Draws the passed Menu to the screen.
         /// </summary>
         /// <param name="menu">The Menu to draw to the screen</param>
-        public static void DrawMenu(Menu menu, List<string> errors = null, List<string> successMessages = null) {
+        public static void DrawMenu(Menu menu, ref List<string> errors, ref List<string> successMessages) {
             Console.Clear();
             //Write out any errors before drawing the Menu
             if (errors != null && errors.Count > 0) {
@@ -83,6 +79,14 @@ namespace EF_UI {
             //DrawPrompt(menu.GetPrompt());
         }
 
+        /// <summary>
+        /// Gets a valid selection from the user for the passed Menu.
+        /// Any error messages which should be displayed to the user are returned in errorMessages.
+        /// Returns a string with the user's valid selection, or an empty string if user's choice was invalid.
+        /// </summary>
+        /// <param name="menu">The Menu containing the valid user choices</param>
+        /// <param name="errorMessages">A List containing any error messages with the user's selection</param>
+        /// <returns>A string containing the user's selection, or an empty string if the user did not make a valid selection</returns>
         public static string GetValidUserSelection(Menu menu, out List<string> errorMessages) {
             DrawPrompt(menu.GetPrompt());
             string userSelection = Console.ReadLine().ToLower();
@@ -245,7 +249,7 @@ namespace EF_UI {
         /// </summary>
         /// <param name="error">The message to write</param>
         public static void WriteError(string error) {
-            WriteColouredLine($"[ERROR]: {error}", MenuColours.ERROR_MESSAGE);
+            WriteColouredLine($"[ERROR]: {error}", MenuColours.RED);
         }
 
         /// <summary>
@@ -253,7 +257,7 @@ namespace EF_UI {
         /// </summary>
         /// <param name="exception">The exception message to write</param>
         public static void WriteException(string exception) {
-            WriteColouredLine(exception, MenuColours.EXCEPTION_MESSAGE);
+            WriteColouredLine(exception, MenuColours.DARK_RED);
         }
 
         /// <summary>
@@ -261,7 +265,7 @@ namespace EF_UI {
         /// </summary>
         /// <param name="message">The success message to write</param>
         public static void WriteSuccess(string message) {
-            WriteColouredLine($"[SUCCESS]: {message}", MenuColours.SUCCESS_MESSAGE);
+            WriteColouredLine($"[SUCCESS]: {message}", MenuColours.GREEN);
         }
     }//end UIHelper
 }
